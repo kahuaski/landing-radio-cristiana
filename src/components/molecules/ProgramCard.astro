@@ -1,0 +1,50 @@
+---
+import Badge from "../atoms/Badge.astro";
+import Icon from "../atoms/Icon.astro";
+
+interface Props {
+	title: string;
+	host: string;
+	schedule: string;
+	description: string;
+	tag: string;
+	time: string;
+}
+
+const { title, host, schedule, description, tag, time } = Astro.props;
+---
+
+<article
+	class="group flex h-full flex-col overflow-hidden rounded-lg border border-outline-variant bg-surface-container-lowest shadow-card transition-shadow hover:shadow-elevated dark:border-white/10 dark:bg-white/5"
+>
+	<div
+		class="flex h-32 items-end bg-gradient-to-br from-navy via-primary-container to-tertiary-container p-4"
+	>
+		<span
+			class="flex h-11 w-11 items-center justify-center rounded-full bg-dawn-bright text-navy shadow-aura transition-transform group-hover:scale-110"
+		>
+			<Icon name="play" class="h-6 w-6" />
+		</span>
+	</div>
+	<div class="flex flex-1 flex-col gap-3 p-5">
+		<div class="flex items-center justify-between gap-2">
+			<Badge variant="brand">{tag}</Badge>
+			<span
+				class="inline-flex items-center gap-1 text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/60"
+			>
+				<Icon name="clock" class="h-4 w-4" />
+				{time}
+			</span>
+		</div>
+		<h3 class="font-display text-headline-sm text-on-surface dark:text-white">
+			{title}
+		</h3>
+		<p class="text-body-sm text-on-surface-variant dark:text-inverse-on-surface/70">
+			{description}
+		</p>
+		<p class="mt-auto pt-2 text-body-sm text-on-surface-variant dark:text-inverse-on-surface/60">
+			<span class="font-semibold text-on-surface dark:text-inverse-on-surface">{host}</span>
+			· {schedule}
+		</p>
+	</div>
+</article>

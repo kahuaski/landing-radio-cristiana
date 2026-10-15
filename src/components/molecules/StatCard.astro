@@ -1,0 +1,30 @@
+---
+import Icon from "../atoms/Icon.astro";
+
+interface Props {
+	icon: "clock" | "mic" | "heart" | "users" | "radio";
+	value: string;
+	label: string;
+	class?: string;
+}
+
+const { icon, value, label, class: className = "" } = Astro.props;
+---
+
+<div
+	class={`flex items-center gap-4 rounded-lg border border-outline-variant bg-surface-container-lowest p-5 shadow-card dark:border-white/10 dark:bg-white/5 ${className}`}
+>
+	<span
+		class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary-container/15 text-dawn dark:text-dawn-bright"
+	>
+		<Icon name={icon} class="h-6 w-6" />
+	</span>
+	<div>
+		<p class="font-display text-headline-md leading-none text-on-surface dark:text-white">
+			{value}
+		</p>
+		<p class="mt-1 text-body-sm text-on-surface-variant dark:text-inverse-on-surface/70">
+			{label}
+		</p>
+	</div>
+</div>

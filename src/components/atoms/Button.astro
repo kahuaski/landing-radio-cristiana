@@ -1,0 +1,41 @@
+---
+interface Props {
+	variant?: "primary" | "secondary" | "ghost" | "live";
+	href?: string;
+	type?: "button" | "submit";
+	class?: string;
+	[key: string]: unknown;
+}
+
+const {
+	variant = "primary",
+	href,
+	type = "button",
+	class: className = "",
+	...rest
+} = Astro.props;
+
+const base =
+	"inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-sans text-label-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-navy";
+
+const variants = {
+	primary:
+		"bg-dawn text-white shadow-card hover:bg-dawn-strong focus-visible:ring-dawn-bright focus-visible:shadow-aura",
+	secondary:
+		"bg-navy text-surface hover:bg-navy-soft dark:bg-surface-container-high dark:text-navy dark:hover:bg-surface-container-highest focus-visible:ring-dawn-bright",
+	ghost:
+		"border border-outline-variant text-on-surface hover:bg-surface-container-low dark:border-white/15 dark:text-inverse-on-surface dark:hover:bg-white/10 focus-visible:ring-dawn-bright",
+	live: "bg-live text-white hover:bg-red-700 focus-visible:ring-live",
+};
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+	href={href}
+	type={href ? undefined : type}
+	class={`${base} ${variants[variant]} ${className}`}
+	{...rest}
+>
+	<slot />
+</Tag>

@@ -1,23 +1,163 @@
+---
+import "../styles/global.css";
+import PlayerBar from "../components/organisms/PlayerBar.astro";
+import PlaylistModal from "../components/organisms/PlaylistModal.astro";
+
+interface Props {
+	/** Título de la página (se le agrega el nombre de la radio). */
+	title?: string;
+	/** Meta description orientada a buscadores (140–160 caracteres). */
+	description?: string;
+	/** Keywords adicionales separadas por coma. */
+	keywords?: string[];
+	/** Imagen para redes sociales (recomendado 1200×630). */
+	image?: string;
+	/** Alt de la imagen OG. */
+	imageAlt?: string;
+	/** Tipo de contenido para Open Graph. */
+	type?: "website" | "article";
+	/** Evita indexación (páginas de prueba o legales). */
+	noindex?: boolean;
+	/** Oculta el reproductor sticky (páginas sin audio). */
+	hidePlayer?: boolean;
+}
+
+const siteName = "Radio Ministerial Mushuk Kawsay";
+const slogan = "Tu canal de Fe";
+
+const {
+	title,
+	description = "Escucha Radio Ministerial Mushuk Kawsay en vivo: alabanzas, predicación, Biblia y devocionales cristianos las 24 horas. Tu canal de fe.",
+	keywords = [
+		"radio cristiana en vivo",
+		"radio ministerial",
+		"alabanzas cristianas",
+		"predicación bíblica",
+		"escuchar la Biblia",
+		"devocionales cristianos",
+		"música cristiana",
+		"programas cristianos",
+		"fe cristiana",
+		"Mushuk Kawsay",
+	],
+	image = "/og-image.png",
+	imageAlt = `${siteName} — ${slogan}`,
+	type = "website",
+	noindex = false,
+	hidePlayer = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${siteName}` : `${siteName} — Escucha en vivo | ${slogan}`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+
+const websiteSchema = {
+	"@context": "https://schema.org",
+	"@graph": [
+		{
+			"@type": "WebSite",
+			"@id": `${canonicalURL}#website`,
+			name: siteName,
+			alternateName: "Mushuk Kawsay",
+			slogan,
+			url: canonicalURL.href,
+			inLanguage: "es-EC",
+			description,
+			publisher: { "@id": `${canonicalURL}#organization` },
+		},
+		{
+			"@type": "Organization",
+			"@id": `${canonicalURL}#organization`,
+			name: siteName,
+			alternateName: "Mushuk Kawsay",
+			slogan,
+			url: canonicalURL.href,
+			logo: new URL("/favicon.svg", Astro.site).href,
+			inLanguage: "es-EC",
+			areaServed: { "@type": "Country", name: "Ecuador" },
+			contactPoint: {
+				"@type": "ContactPoint",
+				contactType: "customer support",
+				availableLanguage: ["es"],
+			},
+		},
+	],
+};
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es-EC">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<!-- Fuentes -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+		/>
+
+		<!-- SEO -->
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords.join(", ")} />
+		<meta
+			name="robots"
+			content={
+				noindex
+					? "noindex, nofollow"
+					: "index, follow, max-image-preview:large, max-snippet:-1"
+			}
+		/>
+		<link rel="canonical" href={canonicalURL.href} />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f9ff" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:locale" content="es_EC" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL.href} />
+		<meta property="og:image" content={imageURL.href} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={imageAlt} />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageURL.href} />
+		<meta name="twitter:image:alt" content={imageAlt} />
+
+		<!-- Datos estructurados -->
+		<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
+		<script>
+			if (
+				localStorage.theme === "dark" ||
+				(!("theme" in localStorage) &&
+					window.matchMedia("(prefers-color-scheme: dark)").matches)
+			) {
+				document.documentElement.classList.add("dark");
+			}
+		</script>
 	</head>
-	<body>
+	<body
+		class={`bg-surface font-sans text-body-md text-on-surface antialiased dark:bg-navy dark:text-inverse-on-surface ${
+			hidePlayer ? "" : "pb-18"
+		}`}
+	>
 		<slot />
+		{!hidePlayer && <PlayerBar />}
+		<PlaylistModal />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

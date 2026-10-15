@@ -1,0 +1,85 @@
+---
+import Button from "../atoms/Button.astro";
+import Icon from "../atoms/Icon.astro";
+
+const pillars = [
+	{
+		icon: "heart" as const,
+		title: "Fe que transforma",
+		description: "Mensajes y alabanzas que edifican tu vida espiritual cada día.",
+	},
+	{
+		icon: "users" as const,
+		title: "Comunidad",
+		description: "Millones de oyentes unidos en oración, adoración y servicio.",
+	},
+	{
+		icon: "mic" as const,
+		title: "Contenido de calidad",
+		description: "Programas producidos con profesionales y pastores experimentados.",
+	},
+];
+---
+
+<section
+	id="nosotros"
+	aria-labelledby="nosotros-title"
+	class="scroll-mt-20 py-16 md:py-24"
+>
+	<div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+		<div
+			class="relative aspect-square w-full overflow-hidden rounded-xl bg-gradient-to-br from-navy via-primary-container to-secondary dark:to-navy shadow-player"
+		>
+			<div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
+				<span
+					class="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 text-dawn-bright shadow-aura"
+				>
+					<Icon name="radio" class="h-10 w-10" />
+				</span>
+				<p class="font-display text-headline-md font-bold">Desde 2011</p>
+				<p class="max-w-xs text-body-md text-white/75">
+					Llevando esperanza a hogares, hospitales y carreteras de todo el país.
+				</p>
+			</div>
+		</div>
+
+		<div class="flex flex-col items-start gap-6">
+			<p class="text-label-broadcast uppercase text-dawn dark:text-dawn-bright">
+				Nosotros
+			</p>
+			<h2
+				id="nosotros-title"
+				class="font-display text-headline-lg font-bold tracking-tight text-on-surface dark:text-white"
+			>
+				Una radio con propósito
+			</h2>
+			<p class="text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80">
+				Radio Ministerial Mushuk Kawsay nació con una misión sencilla: usar los
+				medios para que Cristo llegue a cada hogar. Transmitimos desde nuestro
+				estudio con un equipo comprometido con la excelencia y la Palabra de Dios.
+			</p>
+
+			<ul class="flex w-full flex-col gap-4">
+				{
+					pillars.map((pillar) => (
+						<li class="flex gap-4 rounded-lg border border-outline-variant bg-surface-container-lowest p-4 shadow-card dark:border-white/10 dark:bg-white/5">
+							<span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-secondary-container/15 text-dawn dark:text-dawn-bright">
+								<Icon name={pillar.icon} class="h-6 w-6" />
+							</span>
+							<div>
+								<p class="font-display text-title-md text-on-surface dark:text-white">
+									{pillar.title}
+								</p>
+								<p class="text-body-sm text-on-surface-variant dark:text-inverse-on-surface/70">
+									{pillar.description}
+								</p>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+
+			<Button href="/nosotros" variant="ghost">Conoce nuestra historia →</Button>
+		</div>
+	</div>
+</section>

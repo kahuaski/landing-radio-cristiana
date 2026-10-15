@@ -1,0 +1,72 @@
+---
+import Icon from "../atoms/Icon.astro";
+import { PLAYLIST } from "../../config/playlist";
+
+interface Props {
+	title?: string;
+	presenter?: string;
+}
+
+const { title = PLAYLIST.title, presenter = PLAYLIST.subtitle } = Astro.props;
+---
+
+<div
+	class="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-navy/90 text-inverse-on-surface shadow-player backdrop-blur-md"
+>
+	<div
+		class="mx-auto flex h-18 max-w-7xl items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-8"
+	>
+		<button
+			type="button"
+			data-playlist-open
+			aria-label="Abrir reproductor de la playlist"
+			class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-dawn text-white shadow-aura transition-colors hover:bg-dawn-strong focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+		>
+			<Icon name="play" class="h-5 w-5" />
+		</button>
+
+		<div class="flex min-w-0 flex-1 items-center gap-3">
+			<span
+				class="hidden shrink-0 items-center gap-1.5 rounded-full bg-dawn-bright/15 px-2.5 py-1 text-label-broadcast uppercase text-dawn-bright sm:inline-flex"
+			>
+				<Icon name="radio" class="h-3.5 w-3.5" />
+				Playlist
+			</span>
+
+			<div class="min-w-0">
+				<p class="truncate text-body-sm font-semibold text-white">{title}</p>
+				<p class="truncate text-body-sm text-inverse-on-surface/60">
+					{presenter}
+				</p>
+			</div>
+
+			<div class="ml-1 hidden h-8 items-end gap-1 sm:flex" aria-hidden="true">
+				{
+					[45, 80, 55, 100, 65, 85, 50].map((height, i) => (
+						<span
+							class="w-1 origin-bottom rounded-full bg-dawn-bright animate-eq"
+							style={`height: ${height}%; animation-delay: ${i * 90}ms`}
+						/>
+					))
+				}
+			</div>
+		</div>
+
+		<button
+			type="button"
+			data-playlist-open
+			class="shrink-0 items-center gap-1.5 rounded-full bg-dawn px-4 py-2 text-label-lg font-semibold text-white transition-colors hover:bg-dawn-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 focus-visible:ring-offset-navy inline-flex"
+		>
+			<Icon name="play" class="h-4 w-4" />
+			<span class="hidden sm:inline">Reproducir</span>
+		</button>
+
+		<a
+			href="#escuchanos"
+			class="hidden shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-label-lg text-white transition-colors hover:bg-white/20 lg:inline-flex"
+		>
+			<Icon name="radio" class="h-4 w-4" />
+			Frecuencias
+		</a>
+	</div>
+</div>

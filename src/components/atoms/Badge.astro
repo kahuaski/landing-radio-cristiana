@@ -1,0 +1,46 @@
+---
+interface Props {
+	variant?: "onair" | "dawn" | "brand" | "muted" | "prayer";
+	dot?: boolean;
+	class?: string;
+	[key: string]: unknown;
+}
+
+const { variant = "muted", dot = false, class: className = "", ...rest } = Astro.props;
+
+const variants = {
+	onair: "bg-live text-white shadow-aura",
+	dawn: "bg-dawn-bright text-navy",
+	brand:
+		"bg-secondary-container/20 text-on-secondary-container dark:bg-secondary-container/25 dark:text-dawn-bright",
+	muted:
+		"bg-surface-container text-on-surface-variant dark:bg-white/10 dark:text-inverse-on-surface",
+	prayer:
+		"bg-prayer text-on-secondary-container border border-prayer-border dark:bg-secondary-container/15 dark:text-dawn-bright dark:border-secondary-container/30",
+};
+
+const dots = {
+	onair: "bg-white",
+	dawn: "bg-navy",
+	brand: "bg-on-secondary-container dark:bg-dawn-bright",
+	muted: "bg-on-surface-variant dark:bg-inverse-on-surface",
+	prayer: "bg-dawn",
+};
+
+const base =
+	"inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-sans text-label-broadcast uppercase";
+---
+
+<span class={`${base} ${variants[variant]} ${className}`} {...rest}>
+	{
+		dot && (
+			<span class="relative flex h-1.5 w-1.5">
+				<span
+					class={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${dots[variant]}`}
+				/>
+				<span class={`relative inline-flex h-1.5 w-1.5 rounded-full ${dots[variant]}`} />
+			</span>
+		)
+	}
+	<slot />
+</span>

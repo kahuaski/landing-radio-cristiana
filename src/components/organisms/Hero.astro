@@ -1,0 +1,117 @@
+---
+import Badge from "../atoms/Badge.astro";
+import Button from "../atoms/Button.astro";
+import Icon from "../atoms/Icon.astro";
+import StatCard from "../molecules/StatCard.astro";
+import { PLAYLIST } from "../../config/playlist";
+
+const stats = [
+	{ icon: "users" as const, value: "50K+", label: "Oyentes mensuales" },
+	{ icon: "mic" as const, value: "12", label: "Programas propios" },
+	{ icon: "clock" as const, value: "24/7", label: "Transmisión en vivo" },
+	{ icon: "heart" as const, value: "15", label: "Años bendiciendo" },
+];
+---
+
+<section class="relative overflow-hidden" aria-labelledby="hero-title">
+	<div
+		class="absolute inset-0 bg-gradient-to-br from-surface via-surface-container-low to-secondary-container/10 dark:from-navy dark:via-navy dark:to-primary-container"
+		aria-hidden="true"
+	>
+	</div>
+	<div
+		class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-dawn-bright/20 blur-3xl"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div
+		class="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:px-8"
+	>
+		<div class="flex flex-col items-start gap-6">
+			<Badge variant="onair" dot>Al aire ahora</Badge>
+
+			<h1
+				id="hero-title"
+				class="font-display text-headline-xl font-extrabold tracking-tight text-on-surface dark:text-white"
+			>
+				La radio que alimenta tu
+				<span class="text-dawn dark:text-dawn-bright">fe</span>
+				cada día
+			</h1>
+
+			<p class="max-w-xl text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80">
+				Alabanzas, predicación y programación cristiana las 24 horas. Acompáñanos
+				en vivo y vive una experiencia de esperanza, música y enseñanza bíblica.
+			</p>
+
+			<div class="flex flex-wrap items-center gap-3">
+				<Button variant="primary" data-playlist-open>
+					<Icon name="play" class="h-4 w-4" />
+					Escuchar en vivo
+				</Button>
+				<Button href="/programas" variant="ghost">Ver programación</Button>
+			</div>
+
+			<dl class="grid w-full grid-cols-2 gap-4 pt-4 sm:grid-cols-4 lg:hidden">
+				{
+					stats.map((stat) => (
+						<div class="rounded-lg border border-outline-variant bg-surface-container-lowest p-4 text-center shadow-card dark:border-white/10 dark:bg-white/5">
+							<dt class="sr-only">{stat.label}</dt>
+							<dd>
+								<p class="font-display text-headline-md text-on-surface dark:text-white">
+									{stat.value}
+								</p>
+								<p class="mt-1 text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/70">
+									{stat.label}
+								</p>
+							</dd>
+						</div>
+					))
+				}
+			</dl>
+		</div>
+
+		<div class="hidden flex-col gap-4 lg:flex">
+			<div class="grid grid-cols-2 gap-4">
+				{
+					stats.map((stat) => (
+						<StatCard icon={stat.icon} value={stat.value} label={stat.label} />
+					))
+				}
+			</div>
+
+			<div
+				id="player"
+				class="scroll-mt-24 rounded-xl bg-navy p-6 text-inverse-on-surface shadow-player dark:border dark:border-white/10"
+			>
+				<div class="flex items-center gap-4">
+					<span
+						class="flex h-14 w-14 items-center justify-center rounded-full bg-dawn text-white shadow-aura"
+					>
+						<Icon name="play" class="h-7 w-7" />
+					</span>
+					<div class="min-w-0">
+						<p class="text-label-broadcast uppercase text-dawn-bright">
+							Playlist
+						</p>
+						<p class="truncate font-display text-title-md text-white">
+							{PLAYLIST.title}
+						</p>
+						<p class="truncate text-body-sm text-inverse-on-surface/60">
+							{PLAYLIST.subtitle} · YouTube
+						</p>
+					</div>
+				</div>
+				<button
+					type="button"
+					data-playlist-open
+					class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-dawn px-5 py-3 text-label-lg font-semibold text-white transition-colors hover:bg-dawn-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+				>
+					<Icon name="play" class="h-4 w-4" />
+					Reproducir playlist
+				</button>
+			</div>
+		</div>
+	</div>
+</section>

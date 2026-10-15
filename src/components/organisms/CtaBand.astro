@@ -1,0 +1,40 @@
+---
+import Button from "../atoms/Button.astro";
+---
+
+<section aria-labelledby="cta-title" class="py-16 md:py-24">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div
+			class="relative overflow-hidden rounded-xl bg-primary-container px-6 py-14 text-center shadow-player sm:px-12 dark:bg-navy-soft"
+		>
+			<div
+				class="pointer-events-none absolute inset-0 bg-gradient-to-r from-dawn/20 via-dawn-bright/10 to-dawn/20"
+				aria-hidden="true"
+			>
+			</div>
+			<div class="relative flex flex-col items-center gap-5">
+				<p class="text-label-broadcast uppercase text-dawn-bright">Únete</p>
+				<h2
+					id="cta-title"
+					class="font-display text-headline-lg font-bold tracking-tight text-white"
+				>
+					¿Quieres ser parte de nuestra misión?
+				</h2>
+				<p class="max-w-2xl text-body-lg text-inverse-on-surface/80">
+					Comparte tu testimonio, propón un programa o apoya el ministerio. Cada
+					aporte hace que más personas escuchen el mensaje de esperanza.
+				</p>
+				<div class="flex flex-wrap justify-center gap-3">
+					<Button href="/contacto" variant="primary">Escríbenos</Button>
+					<Button
+						variant="ghost"
+						class="border-white/25 text-white hover:bg-white/10 dark:border-white/25 dark:text-white dark:hover:bg-white/10"
+						data-playlist-open
+					>
+						Escuchar ahora
+					</Button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

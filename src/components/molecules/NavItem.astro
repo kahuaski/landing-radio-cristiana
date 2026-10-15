@@ -1,0 +1,22 @@
+---
+interface Props {
+	href: string;
+	label: string;
+	active?: boolean;
+	class?: string;
+}
+
+const { href, label, active = false, class: className = "" } = Astro.props;
+---
+
+<a
+	href={href}
+	aria-current={active ? "page" : undefined}
+	class={`rounded-md px-3 py-2 font-sans text-label-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright ${
+		active
+			? "text-dawn dark:text-dawn-bright"
+			: "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface dark:text-inverse-on-surface/70 dark:hover:bg-white/10 dark:hover:text-white"
+	} ${className}`}
+>
+	{label}
+</a>

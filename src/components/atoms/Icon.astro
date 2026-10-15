@@ -1,0 +1,71 @@
+---
+interface Props {
+	name:
+		| "play"
+		| "pause"
+		| "volume"
+		| "radio"
+		| "clock"
+		| "mic"
+		| "heart"
+		| "users"
+		| "send"
+		| "menu"
+		| "sun"
+		| "moon";
+	class?: string;
+}
+
+const { name, class: className = "h-5 w-5" } = Astro.props;
+
+type IconDef = { d: string; fill?: boolean };
+
+const icons: Record<Props["name"], IconDef> = {
+	play: { d: "M8 5.14v14l11-7-11-7z", fill: true },
+	pause: { d: "M8 5h3v14H8zM13 5h3v14h-3z", fill: true },
+	volume: {
+		d: "M11 5 6.5 9H3v6h3.5L11 19V5zm4 2.5a5 5 0 0 1 0 9m1.8-12a8.5 8.5 0 0 1 0 15",
+	},
+	radio: {
+		d: "M4.5 9.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-8zm5.75 3.75a2.75 2.75 0 1 0 5.5 0 2.75 2.75 0 0 0-5.5 0zM15.5 4 17.5 7",
+	},
+	clock: { d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zm0-14v5l3.5 2" },
+	mic: {
+		d: "M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2z",
+	},
+	heart: {
+		d: "M12 20.5s-7-4.4-9-8.4A5.1 5.1 0 0 1 12 6.6a5.1 5.1 0 0 1 9 5.5c-2 4-9 8.4-9 8.4z",
+	},
+	users: {
+		d: "M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm8 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 19.5c0-3 2.9-5 6.5-5s6.5 2 6.5 5M17 15c2.5.3 4.5 2 4.5 4.5",
+	},
+	send: { d: "M4 12 20 4l-8 16-2.5-6.5L4 12z" },
+	menu: { d: "M4 7h16M4 12h16M4 17h16" },
+	sun: {
+		d: "M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-14.5v2m0 15v2M4.2 4.2l1.5 1.5m12.6 12.6 1.5 1.5M1.5 12h2m17 0h2M4.2 19.8l1.5-1.5M17.8 5.7l1.5-1.5",
+	},
+	moon: { d: "M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" },
+};
+
+const icon = icons[name];
+
+const svgAttrs = icon.fill
+	? ({ fill: "currentColor" } as const)
+	: ({
+			fill: "none",
+			stroke: "currentColor",
+			"stroke-width": "1.75",
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round",
+		} as const);
+---
+
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 24 24"
+	aria-hidden="true"
+	class={className}
+	{...svgAttrs}
+>
+	<path d={icon.d} />
+</svg>
