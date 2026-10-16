@@ -1,0 +1,13 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "radio-cristiana",
+	"compatibility_date": "2026-01-01",
+	"pages_build_output_dir": "dist",
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "radio-visitas",
+			"database_id": "REEMPLAZA_CON_TU_DATABASE_ID"
+		}
+	]
+}
