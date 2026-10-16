@@ -1,0 +1,226 @@
+---
+// Contador público de visitas por origen (Facebook, Google, directo, etc.).
+// Los datos vienen de la Pages Function /api/visitas (D1). La sección se
+// mantiene oculta hasta que haya datos, para no mostrar un contador vacío.
+---
+
+<section
+	id="comunidad"
+	data-visitas
+	hidden
+	aria-labelledby="comunidad-title"
+	class="scroll-mt-20 py-16 md:py-24"
+>
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-2xl text-center">
+			<p class="text-label-broadcast uppercase text-dawn dark:text-dawn-bright">
+				Comunidad
+			</p>
+			<h2
+				id="comunidad-title"
+				class="mt-2 font-display text-headline-lg font-bold tracking-tight text-on-surface dark:text-white"
+			>
+				De dónde nos están visitando
+			</h2>
+			<p class="mt-3 text-body-lg text-on-surface-variant dark:text-inverse-on-surface/75">
+				Personas que llegan a nuestra página desde Facebook, buscadores y otros
+				canales. Se actualiza en tiempo real y de forma anónima.
+			</p>
+		</div>
+
+		<dl class="mt-10 grid gap-4 sm:grid-cols-3">
+			<div
+				class="rounded-lg border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-card dark:border-white/10 dark:bg-white/5"
+			>
+				<dt class="text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/70">
+					Hoy
+				</dt>
+				<dd
+					data-visitas-total="hoy"
+					class="mt-1 font-display text-headline-lg font-bold text-on-surface dark:text-white"
+				>
+					—
+				</dd>
+			</div>
+			<div
+				class="rounded-lg border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-card dark:border-white/10 dark:bg-white/5"
+			>
+				<dt class="text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/70">
+					Este mes
+				</dt>
+				<dd
+					data-visitas-total="mes"
+					class="mt-1 font-display text-headline-lg font-bold text-on-surface dark:text-white"
+				>
+					—
+				</dd>
+			</div>
+			<div
+				class="rounded-lg border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-card dark:border-white/10 dark:bg-white/5"
+			>
+				<dt class="text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/70">
+					Histórico
+				</dt>
+				<dd
+					data-visitas-total="total"
+					class="mt-1 font-display text-headline-lg font-bold text-dawn dark:text-dawn-bright"
+				>
+					—
+				</dd>
+			</div>
+		</dl>
+
+		<ul
+			data-visitas-fuentes
+			class="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3"
+		>
+		</ul>
+
+		<p
+			class="mt-6 text-center text-body-sm text-on-surface-variant dark:text-inverse-on-surface/60"
+		>
+			Conteo anónimo: no usamos cookies ni guardamos tu IP.
+		</p>
+	</div>
+</section>
+
+<script>
+	const ETIQUETAS: Record<string, string> = {
+		facebook: "Facebook",
+		instagram: "Instagram",
+		google: "Google",
+		youtube: "YouTube",
+		whatsapp: "WhatsApp",
+		tiktok: "TikTok",
+		twitter: "X (Twitter)",
+		linkedin: "LinkedIn",
+		telegram: "Telegram",
+		directo: "Acceso directo",
+		otro: "Otros",
+	};
+
+	interface Totales {
+		hoy: number;
+		mes: number;
+		total: number;
+	}
+
+	interface Datos {
+		hoy: number;
+		mes: number;
+		total: number;
+		porOrigen: Record<string, Totales>;
+		actualizado: string;
+	}
+
+	const REDES: Array<[RegExp, string]> = [
+		[/facebook|fb\.|l\.facebook|m\.facebook|\bfb\b/, "facebook"],
+		[/instagram|\big\b/, "instagram"],
+		[/google|bing|duckduckgo|yahoo|search/, "google"],
+		[/youtube|youtu\.be/, "youtube"],
+		[/whatsapp|wa\.me/, "whatsapp"],
+		[/tiktok/, "tiktok"],
+		[/twitter|t\.co|\bx\b/, "twitter"],
+		[/linkedin/, "linkedin"],
+		[/telegram|t\.me/, "telegram"],
+	];
+
+	function detectarOrigen(): string {
+		let referencia = "";
+		try {
+			const params = new URLSearchParams(location.search);
+			const utm = (
+				params.get("utm_source") ??
+				params.get("ref") ??
+				""
+			).toLowerCase();
+			const host = document.referrer
+				? new URL(document.referrer).hostname.toLowerCase()
+				: "";
+			referencia = `${utm} ${host}`.trim();
+		} catch {
+			referencia = "";
+		}
+
+		if (!referencia) return "directo";
+
+		for (const [patron, origen] of REDES) {
+			if (patron.test(referencia)) return origen;
+		}
+		return "otro";
+	}
+
+	function pintar(datos: Datos): void {
+		const totales: Record<string, number> = {
+			hoy: datos.hoy,
+			mes: datos.mes,
+			total: datos.total,
+		};
+		for (const [clave, valor] of Object.entries(totales)) {
+			const nodo = document.querySelector<HTMLElement>(
+				`[data-visitas-total="${clave}"]`,
+			);
+			if (nodo) nodo.textContent = valor.toLocaleString("es-EC");
+		}
+
+		const lista = document.querySelector<HTMLElement>("[data-visitas-fuentes]");
+		if (lista) {
+			lista.replaceChildren();
+			const entradas = Object.entries(datos.porOrigen)
+				.filter(([origen, t]) => t.total > 0 && ETIQUETAS[origen])
+				.sort((a, b) => b[1].total - a[1].total);
+
+			for (const [origen, t] of entradas) {
+				const li = document.createElement("li");
+				li.className =
+					"flex items-center gap-2 rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 text-body-sm shadow-card dark:border-white/10 dark:bg-white/5";
+
+				const nombre = document.createElement("span");
+				nombre.className =
+					"font-semibold text-on-surface dark:text-white";
+				nombre.textContent = ETIQUETAS[origen];
+
+				const cifra = document.createElement("span");
+				cifra.className = "text-on-surface-variant dark:text-inverse-on-surface/70";
+				cifra.textContent = t.total.toLocaleString("es-EC");
+
+				li.append(nombre, cifra);
+				lista.append(li);
+			}
+		}
+
+		const seccion = document.querySelector<HTMLElement>("[data-visitas]");
+		seccion?.removeAttribute("hidden");
+	}
+
+	async function cargar(): Promise<void> {
+		const origen = detectarOrigen();
+		let datos: Datos | null = null;
+		const yaRegistrada = sessionStorage.getItem("visita-registrada");
+
+		try {
+			if (!yaRegistrada) {
+				const res = await fetch("/api/visitas", {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({ origen }),
+				});
+				if (res.ok) {
+					datos = (await res.json()).data as Datos;
+					sessionStorage.setItem("visita-registrada", "1");
+				}
+			}
+
+			if (!datos) {
+				const res = await fetch("/api/visitas");
+				if (res.ok) datos = (await res.json()).data as Datos;
+			}
+		} catch {
+			return;
+		}
+
+		if (datos) pintar(datos);
+	}
+
+	void cargar();
+</script>
