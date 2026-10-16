@@ -1,13 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ComingSoon from "../components/organisms/ComingSoon.astro";
+import Home from "../components/templates/Home.astro";
+import Holding from "../components/templates/Holding.astro";
+
+// En desarrollo se muestra la landing para poder avanzar.
+// En producción se muestra la página de remodelación (holding).
+const Pagina = import.meta.env.DEV ? Home : Holding;
 ---
 
-<Layout
-	title="Pronto estaremos aquí"
-	description="Estamos renovando el sitio de Radio Ministerial Mushuk Kawsay para alcanzar nuevos logros. Vuelve pronto: pronto estaremos aquí."
-	noindex
-	hidePlayer
->
-	<ComingSoon />
-</Layout>
+<Pagina />

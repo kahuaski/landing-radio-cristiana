@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import PlayerBar from "../components/organisms/PlayerBar.astro";
-import PlaylistModal from "../components/organisms/PlaylistModal.astro";
+import MediaModal from "../components/organisms/MediaModal.astro";
 
 interface Props {
 	/** Título de la página (se le agrega el nombre de la radio). */
@@ -158,6 +158,6 @@ const websiteSchema = {
 	>
 		<slot />
 		{!hidePlayer && <PlayerBar />}
-		<PlaylistModal />
+		<MediaModal />
 	</body>
 </html>

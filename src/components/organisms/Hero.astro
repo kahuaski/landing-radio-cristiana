@@ -2,8 +2,7 @@
 import Badge from "../atoms/Badge.astro";
 import Button from "../atoms/Button.astro";
 import Icon from "../atoms/Icon.astro";
-import StatCard from "../molecules/StatCard.astro";
-import { PLAYLIST } from "../../config/playlist";
+import { MEDIA } from "../../config/media";
 
 const stats = [
 	{ icon: "users" as const, value: "50K+", label: "Oyentes mensuales" },
@@ -35,18 +34,27 @@ const stats = [
 				id="hero-title"
 				class="font-display text-headline-xl font-extrabold tracking-tight text-on-surface dark:text-white"
 			>
-				La radio que alimenta tu
-				<span class="text-dawn dark:text-dawn-bright">fe</span>
-				cada día
+				Radio  Ministerial Mushuk Kawsay, tu canal de  
+				<span class="text-dawn dark:text-dawn-bright"> Fe</span>
+				
 			</h1>
+			<img
+				src="/logo1.jpeg"
+				alt="Logo de Radio Ministerial Mushuk Kawsay"
+				width="800"
+				height="800"
+				loading="eager"
+				decoding="async"
+				class="h-full w-auto object-contain sm:h-full"
+			/>
+
 
 			<p class="max-w-xl text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80">
-				Alabanzas, predicación y programación cristiana las 24 horas. Acompáñanos
-				en vivo y vive una experiencia de esperanza, música y enseñanza bíblica.
+				Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en donde quiera que vayas. (Josué 1:9, RVR1960)
 			</p>
 
 			<div class="flex flex-wrap items-center gap-3">
-				<Button variant="primary" data-playlist-open>
+				<Button variant="primary" data-playlist-open data-media-target="live">
 					<Icon name="play" class="h-4 w-4" />
 					Escuchar en vivo
 				</Button>
@@ -73,13 +81,7 @@ const stats = [
 		</div>
 
 		<div class="hidden flex-col gap-4 lg:flex">
-			<div class="grid grid-cols-2 gap-4">
-				{
-					stats.map((stat) => (
-						<StatCard icon={stat.icon} value={stat.value} label={stat.label} />
-					))
-				}
-			</div>
+		
 
 			<div
 				id="player"
@@ -93,23 +95,24 @@ const stats = [
 					</span>
 					<div class="min-w-0">
 						<p class="text-label-broadcast uppercase text-dawn-bright">
-							Playlist
+							Música
 						</p>
 						<p class="truncate font-display text-title-md text-white">
-							{PLAYLIST.title}
+							{MEDIA.music.title}
 						</p>
 						<p class="truncate text-body-sm text-inverse-on-surface/60">
-							{PLAYLIST.subtitle} · YouTube
+							{MEDIA.music.subtitle} · YouTube
 						</p>
 					</div>
 				</div>
 				<button
 					type="button"
 					data-playlist-open
+					data-media-target="music"
 					class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-dawn px-5 py-3 text-label-lg font-semibold text-white transition-colors hover:bg-dawn-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
 				>
 					<Icon name="play" class="h-4 w-4" />
-					Reproducir playlist
+					Reproducir música
 				</button>
 			</div>
 		</div>

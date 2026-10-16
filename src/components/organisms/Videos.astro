@@ -1,0 +1,110 @@
+---
+import Badge from "../atoms/Badge.astro";
+import Button from "../atoms/Button.astro";
+import Icon from "../atoms/Icon.astro";
+import { MEDIA, getEmbedUrl } from "../../config/media";
+
+const videosEmbed = getEmbedUrl(MEDIA.videos.url);
+---
+
+<section
+	id="videos"
+	aria-labelledby="videos-title"
+	class="scroll-mt-20 py-16 md:py-24"
+>
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="max-w-2xl">
+			<p class="text-label-broadcast uppercase text-dawn dark:text-dawn-bright">
+				Multimedia
+			</p>
+			<h2
+				id="videos-title"
+				class="mt-2 font-display text-headline-lg font-bold tracking-tight text-on-surface dark:text-white"
+			>
+				Videos y transmisiones en vivo
+			</h2>
+			<p
+				class="mt-4 text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80"
+			>
+				No solo música: mira nuestras predicaciones, mensajes y cultos
+				completos, además de las transmisiones en vivo cuando estamos al aire.
+			</p>
+		</div>
+
+		<div class="mt-10 grid gap-gutter lg:grid-cols-5">
+			<div
+				class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-card lg:col-span-3 dark:border-white/10 dark:bg-white/5"
+			>
+				<div class="aspect-video w-full bg-black">
+					<iframe
+						src={videosEmbed}
+						title={`Videos: ${MEDIA.videos.title}`}
+						loading="lazy"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+						referrerpolicy="strict-origin-when-cross-origin"
+						class="h-full w-full border-0"></iframe>
+				</div>
+				<div class="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+					<div class="min-w-0">
+						<p class="text-label-broadcast uppercase text-dawn dark:text-dawn-bright">
+							Videos
+						</p>
+						<p class="truncate font-display text-title-md text-on-surface dark:text-white">
+							{MEDIA.videos.title}
+						</p>
+					</div>
+					<Button variant="ghost" data-playlist-open data-media-target="videos">
+						<Icon name="play" class="h-4 w-4" />
+						Abrir reproductor
+					</Button>
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-gutter lg:col-span-2">
+				<div
+					class="flex flex-col rounded-xl bg-navy p-6 text-inverse-on-surface shadow-player dark:border dark:border-white/10"
+				>
+					<Badge variant="onair" dot>En vivo</Badge>
+					<h3 class="mt-4 font-display text-title-md text-white">
+						{MEDIA.live.title}
+					</h3>
+					<p class="mt-2 text-body-sm text-inverse-on-surface/70">
+						{MEDIA.live.subtitle}. Acompáñanos en directo donde quiera que
+						estés.
+					</p>
+					<Button
+						variant="primary"
+						class="mt-5 w-full"
+						data-playlist-open
+						data-media-target="live"
+					>
+						<Icon name="play" class="h-4 w-4" />
+						Ver en vivo
+					</Button>
+				</div>
+
+				<button
+					type="button"
+					data-playlist-open
+					data-media-target="music"
+					class="flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 text-left shadow-card transition-colors hover:bg-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+				>
+					<span
+						class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-dawn text-white shadow-aura"
+					>
+						<Icon name="headphones" class="h-5 w-5" />
+					</span>
+					<div class="min-w-0">
+						<p class="text-label-broadcast uppercase text-dawn dark:text-dawn-bright">
+							Música
+						</p>
+						<p class="truncate font-display text-title-md text-on-surface dark:text-white">
+							{MEDIA.music.title}
+						</p>
+					</div>
+				</button>
+			</div>
+		</div>
+	</div>
+</section>

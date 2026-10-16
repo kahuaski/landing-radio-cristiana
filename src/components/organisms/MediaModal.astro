@@ -1,0 +1,160 @@
+---
+import { MEDIA, MEDIA_ORDER, getEmbedUrl } from "../../config/media";
+
+const tabs = MEDIA_ORDER.map((kind) => {
+	const source = MEDIA[kind];
+	return {
+		kind,
+		label: source.label,
+		title: source.title,
+		isLive: Boolean(source.live),
+		src: getEmbedUrl(source.url),
+	};
+});
+---
+
+<dialog
+	data-media-modal
+	aria-label="Reproductor multimedia"
+	class="m-auto w-[min(92vw,56rem)] rounded-xl border border-white/10 bg-navy p-0 text-inverse-on-surface shadow-player backdrop:bg-navy/70 backdrop:backdrop-blur-sm"
+>
+	<div class="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
+		<div class="flex min-w-0 items-center gap-3">
+			<span
+				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-dawn text-white shadow-aura"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					aria-hidden="true"
+					class="h-5 w-5"
+				>
+					<path d="M8 5.14v14l11-7-11-7z"></path>
+				</svg>
+			</span>
+			<div class="min-w-0">
+				<p class="text-label-broadcast uppercase text-dawn-bright">Multimedia</p>
+				<p class="truncate font-display text-title-md text-white">
+					Radio Ministerial Mushuk Kawsay
+				</p>
+			</div>
+		</div>
+		<button
+			type="button"
+			data-media-close
+			aria-label="Cerrar reproductor"
+			class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-inverse-on-surface/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.75"
+				stroke-linecap="round"
+				aria-hidden="true"
+				class="h-5 w-5"
+			>
+				<path d="M6 6l12 12M18 6 6 18"></path>
+			</svg>
+		</button>
+	</div>
+
+	<div
+		role="tablist"
+		aria-label="Fuentes multimedia"
+		class="flex flex-wrap gap-2 px-5 pt-4"
+	>
+		{
+			tabs.map((tab) => (
+				<button
+					type="button"
+					role="tab"
+					data-media-tab={tab.kind}
+					data-src={tab.src}
+					aria-selected="false"
+					class="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-label-lg font-semibold text-inverse-on-surface/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright aria-selected:border-dawn-bright/40 aria-selected:bg-white/10 aria-selected:text-white"
+				>
+					{tab.isLive && (
+						<span class="relative flex h-1.5 w-1.5">
+							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-live opacity-75" />
+							<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-live" />
+						</span>
+					)}
+					{tab.label}
+				</button>
+			))
+		}
+	</div>
+
+	<div class="p-5">
+		<div class="aspect-video w-full overflow-hidden rounded-lg bg-black">
+			<iframe
+				data-media-frame
+				title="Reproductor de YouTube: Radio Ministerial Mushuk Kawsay"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+				referrerpolicy="strict-origin-when-cross-origin"
+				class="h-full w-full border-0"></iframe>
+		</div>
+
+		<p class="mt-3 text-body-sm text-inverse-on-surface/60">
+			Contenido reproducido desde YouTube. Usa las pestañas para cambiar entre
+			la transmisión en vivo, la música y los videos.
+		</p>
+	</div>
+</dialog>
+
+<script>
+	const modal = document.querySelector<HTMLDialogElement>("[data-media-modal]");
+	const frame = modal?.querySelector<HTMLIFrameElement>("[data-media-frame]");
+	const closeBtn = modal?.querySelector<HTMLButtonElement>("[data-media-close]");
+	const tabs = Array.from(
+		modal?.querySelectorAll<HTMLButtonElement>("[data-media-tab]") ?? [],
+	);
+	const triggers = document.querySelectorAll<HTMLElement>("[data-playlist-open]");
+
+	const activate = (kind?: string) => {
+		if (!frame || tabs.length === 0) return;
+		const tab = tabs.find((item) => item.dataset.mediaTab === kind) ?? tabs[0];
+		tabs.forEach((item) =>
+			item.setAttribute("aria-selected", String(item === tab)),
+		);
+		const src = tab.dataset.src;
+		if (src) frame.setAttribute("src", src);
+	};
+
+	const open = (target?: string) => {
+		if (!modal) return;
+		activate(target);
+		if (!modal.open) modal.showModal();
+	};
+
+	const close = () => {
+		if (!modal) return;
+		modal.close();
+		// Detiene la reproducción al cerrar.
+		frame?.removeAttribute("src");
+	};
+
+	tabs.forEach((tab) =>
+		tab.addEventListener("click", () => activate(tab.dataset.mediaTab)),
+	);
+
+	triggers.forEach((trigger) =>
+		trigger.addEventListener("click", () =>
+			open((trigger as HTMLElement).dataset.mediaTarget),
+		),
+	);
+
+	closeBtn?.addEventListener("click", close);
+
+	// Cerrar al hacer clic fuera del diálogo.
+	modal?.addEventListener("click", (event) => {
+		if (event.target === modal) close();
+	});
+
+	// El cierre con ESC limpia el iframe.
+	modal?.addEventListener("close", () => frame?.removeAttribute("src"));
+</script>
