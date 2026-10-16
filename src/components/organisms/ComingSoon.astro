@@ -1,0 +1,110 @@
+---
+import Badge from "../atoms/Badge.astro";
+import Button from "../atoms/Button.astro";
+import Icon from "../atoms/Icon.astro";
+
+const upcoming = [
+	{ icon: "mic" as const, label: "Nuevos programas" },
+	{ icon: "headphones" as const, label: "Serie de mensajes" },
+	{ icon: "sparkles" as const, label: "Devocionales diarios" },
+	{ icon: "heart" as const, label: "Peticiones de oración" },
+];
+---
+
+<main
+	class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16 sm:px-6"
+>
+	<div
+		class="absolute inset-0 bg-gradient-to-br from-surface via-surface-container-low to-secondary-container/10 dark:from-navy dark:via-navy dark:to-primary-container"
+		aria-hidden="true"
+	>
+	</div>
+	<div
+		class="pointer-events-none absolute -left-24 top-10 h-80 w-80 rounded-full bg-dawn-bright/20 blur-3xl"
+		aria-hidden="true"
+	>
+	</div>
+	<div
+		class="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-dawn/15 blur-3xl"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div class="relative w-full max-w-3xl text-center">
+		<a
+			href="/"
+			class="mb-10 inline-flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright"
+		>
+			<span
+				class="flex h-11 w-11 items-center justify-center rounded-md bg-navy text-dawn-bright dark:bg-surface-container-high dark:text-dawn"
+			>
+				<Icon name="radio" class="h-6 w-6" />
+			</span>
+			<span
+				class="font-display text-title-md font-bold tracking-tight text-on-surface dark:text-white"
+			>
+				Radio Ministerial Mushuk Kawsay
+			</span>
+		</a>
+
+		<div class="flex justify-center">
+			<Badge variant="onair" dot>Próximamente</Badge>
+		</div>
+
+		<h1
+			class="mt-6 font-display text-headline-xl font-extrabold tracking-tight text-on-surface dark:text-white"
+		>
+			Pronto estaremos
+			<span class="text-dawn dark:text-dawn-bright">aquí</span>
+		</h1>
+
+		<p class="mx-auto mt-5 max-w-2xl text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80">
+			Estamos renovando nuestro espacio digital para servirte mejor. Mientras
+			preparamos todo, te invitamos a seguir acompañándonos con la esperanza puesta
+			en lo que Dios hará.
+		</p>
+
+		<blockquote
+			class="mx-auto mt-10 max-w-2xl rounded-xl border border-prayer-border bg-prayer p-8 text-left shadow-card dark:border-secondary-container/25 dark:bg-secondary-container/10"
+		>
+			<Icon name="sparkles" class="h-7 w-7 text-dawn dark:text-dawn-bright" />
+			<p
+				class="mt-4 font-display text-headline-sm leading-relaxed text-on-surface dark:text-white"
+			>
+				«Olvidando ciertamente lo que queda atrás, y extendiéndome a lo que está
+				delante, prosigo a la meta, al premio del supremo llamamiento de Dios en
+				Cristo Jesús.»
+			</p>
+			<cite
+				class="mt-4 block text-label-broadcast uppercase text-dawn not-italic dark:text-dawn-bright"
+			>
+				Filipenses 3:13-14 · RVR1960
+			</cite>
+		</blockquote>
+
+		<p class="mx-auto mt-6 max-w-2xl text-body-md text-on-surface-variant dark:text-inverse-on-surface/70">
+			«He aquí que yo hago cosa nueva; pronto saldrá a luz; ¿no la conoceréis?»
+			<span class="font-semibold text-on-surface dark:text-inverse-on-surface">
+				— Isaías 43:19</span
+			>
+		</p>
+
+		<ul class="mt-10 flex flex-wrap justify-center gap-3">
+			{
+				upcoming.map((item) => (
+					<li class="inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 text-label-lg text-on-surface-variant shadow-card dark:border-white/10 dark:bg-white/5 dark:text-inverse-on-surface/80">
+						<Icon name={item.icon} class="h-4 w-4 text-dawn dark:text-dawn-bright" />
+						{item.label}
+					</li>
+				))
+			}
+		</ul>
+
+		<div class="mt-10 flex flex-wrap justify-center gap-3">
+			<Button variant="primary" data-playlist-open>
+				<Icon name="play" class="h-4 w-4" />
+				Escuchar la playlist
+			</Button>
+		</div>
+	</div>
+</main>

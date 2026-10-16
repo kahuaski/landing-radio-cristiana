@@ -1,60 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Navbar from "../components/organisms/Navbar.astro";
-import Hero from "../components/organisms/Hero.astro";
-import Programs from "../components/organisms/Programs.astro";
-import Frequency from "../components/organisms/Frequency.astro";
-import About from "../components/organisms/About.astro";
-import CtaBand from "../components/organisms/CtaBand.astro";
-import Footer from "../components/organisms/Footer.astro";
-
-const radioSchema = {
-	"@context": "https://schema.org",
-	"@type": "RadioStation",
-	name: "Radio Ministerial Mushuk Kawsay",
-	alternateName: "Mushuk Kawsay Radio",
-	slogan: "Tu canal de Fe",
-	description:
-		"Radio cristiana ministerial que transmite alabanzas, adoración, predicación bíblica, devocionales y programas cristianos para toda familia, las 24 horas del día.",
-	url: Astro.site?.href,
-	logo: new URL("/icono1.jpg", Astro.site ?? "https://radiocristiana.example.com")
-		.href,
-	inLanguage: "es-EC",
-	knowsLanguage: ["es", "qu"],
-	areaServed: { "@type": "Country", name: "Ecuador" },
-	broadcastChannel: [
-		{
-			"@type": "RadioChannel",
-			name: "Radio Ministerial Mushuk Kawsay online",
-			broadcastFrequency: "En línea 24/7",
-		},
-	],
-};
+import ComingSoon from "../components/organisms/ComingSoon.astro";
 ---
 
 <Layout
-	title="Escucha en vivo 24/7"
-	description="Escucha en vivo alabanzas, adoración, predicación bíblica y devocionales cristianos con Radio Ministerial Mushuk Kawsay, tu canal de fe las 24 horas."
-	keywords={[
-		"radio cristiana en vivo",
-		"escuchar radio cristiana por internet",
-		"alabanzas cristianas en vivo",
-		"predicación bíblica",
-		"devocionales cristianos",
-		"música de adoración",
-		"programas cristianos",
-		"radio ministerial ecuador",
-		"Mushuk Kawsay",
-	]}
+	title="Pronto estaremos aquí"
+	description="Estamos renovando el sitio de Radio Ministerial Mushuk Kawsay para alcanzar nuevos logros. Vuelve pronto: pronto estaremos aquí."
+	noindex
+	hidePlayer
 >
-	<script type="application/ld+json" set:html={JSON.stringify(radioSchema)} />
-	<Navbar />
-	<main>
-		<Hero />
-		<Programs />
-		<Frequency />
-		<About />
-		<CtaBand />
-	</main>
-	<Footer />
+	<ComingSoon />
 </Layout>

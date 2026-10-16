@@ -11,5 +11,14 @@ const site = 'https://radiocristiana.example.com';
 export default defineConfig({
 	site,
 	vite: { plugins: [tailwindcss()] },
-	integrations: [sitemap()],
+	integrations: [
+		sitemap({
+			// La home real (/inicio) queda fuera mientras la holding está activa.
+			filter: (page) => !page.includes('/inicio'),
+		}),
+	],
+	redirects: {
+		// Alias histórico → holding
+		'/remodelacion': '/',
+	},
 });
