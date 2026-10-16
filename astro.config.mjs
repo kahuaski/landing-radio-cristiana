@@ -18,7 +18,7 @@ export default defineConfig({
 		}),
 	],
 	redirects: {
-		// Alias histórico → holding
+		// Alias histórico → holding (la raíz ya muestra la remodelación).
 		'/remodelacion': '/',
 	},
 });

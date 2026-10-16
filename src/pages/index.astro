@@ -1,55 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Navbar from "../components/organisms/Navbar.astro";
-import Hero from "../components/organisms/Hero.astro";
-import Programs from "../components/organisms/Programs.astro";
-import Frequency from "../components/organisms/Frequency.astro";
-import About from "../components/organisms/About.astro";
-import VisitorSources from "../components/organisms/VisitorSources.astro";
-import CtaBand from "../components/organisms/CtaBand.astro";
-import Footer from "../components/organisms/Footer.astro";
-
-const radioSchema = {
-	"@context": "https://schema.org",
-	"@type": "RadioStation",
-	name: "Radio Ministerial Mushuk Kawsay",
-	alternateName: "Mushuk Kawsay Radio",
-	slogan: "Tu canal de Fe",
-	description:
-		"Radio cristiana ministerial que transmite alabanzas, adoración, predicación bíblica, devocionales y programas cristianos para toda familia, las 24 horas del día.",
-	url: Astro.site?.href,
-	logo: new URL("/icono1.jpg", Astro.site ?? "https://radiocristiana.example.com")
-		.href,
-	inLanguage: "es-EC",
-	knowsLanguage: ["es", "qu"],
-	areaServed: { "@type": "Country", name: "Ecuador" },
-	broadcastChannel: [
-		{
-			"@type": "RadioChannel",
-			name: "Radio Ministerial Mushuk Kawsay online",
-			broadcastFrequency: "En línea 24/7",
-		},
-	],
-};
+import ComingSoon from "../components/organisms/ComingSoon.astro";
 ---
 
-<Fragment>
-	<Layout
+<Layout
 	title="Pronto estaremos aquí"
 	description="Estamos renovando el sitio de Radio Ministerial Mushuk Kawsay para alcanzar nuevos logros. Vuelve pronto: pronto estaremos aquí."
 	noindex
 	hidePlayer
 >
-	<script type="application/ld+json" set:html={JSON.stringify(radioSchema)} />
-	<Navbar />
-	<main>
-		<Hero />
-		<Programs />
-		<Frequency />
-		<About />
-		<VisitorSources />
-		<CtaBand />
-	</main>
-	<Footer />
+	<ComingSoon />
 </Layout>
-</Fragment>
