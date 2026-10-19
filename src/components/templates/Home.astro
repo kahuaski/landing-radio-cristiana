@@ -2,12 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../organisms/Navbar.astro";
 import Hero from "../organisms/Hero.astro";
-import Videos from "../organisms/Videos.astro";
 import Programs from "../organisms/Programs.astro";
-import Frequency from "../organisms/Frequency.astro";
+import Social from "../organisms/Social.astro";
 import About from "../organisms/About.astro";
 import VisitorSources from "../organisms/VisitorSources.astro";
 import CtaBand from "../organisms/CtaBand.astro";
+import AdBanner from "../organisms/AdBanner.astro";
 import Footer from "../organisms/Footer.astro";
 
 const radioSchema = {
@@ -35,7 +35,7 @@ const radioSchema = {
 ---
 
 <Layout
-	title="Escucha en vivo 24/7"
+	title="Tu Canal de Fe"
 	description="Escucha en vivo alabanzas, adoración, predicación bíblica y devocionales cristianos con Radio Ministerial Mushuk Kawsay, tu canal de fe las 24 horas."
 	keywords={[
 		"radio cristiana en vivo",
@@ -52,13 +52,14 @@ const radioSchema = {
 	<script type="application/ld+json" set:html={JSON.stringify(radioSchema)} />
 	<Navbar />
 	<main>
+		<AdBanner class="pt-5 pb-0 md:pt-6" compacto />
 		<Hero />
-		<Videos />
 		<Programs />
-		<Frequency />
+		<Social />
 		<About />
 		<VisitorSources />
 		<CtaBand />
+		<AdBanner />
 	</main>
 	<Footer />
 </Layout>

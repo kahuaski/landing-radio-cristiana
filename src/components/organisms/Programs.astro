@@ -1,61 +1,43 @@
 ---
-import Button from "../atoms/Button.astro";
-import ProgramCard from "../molecules/ProgramCard.astro";
+import Badge from "../atoms/Badge.astro";
+import Icon from "../atoms/Icon.astro";
 
-const programs = [
+interface Programa {
+	id: string;
+	titulo: string;
+	diasLabel: string;
+	diasCorto: string;
+	inicio: string;
+	fin: string;
+	duracion: string;
+	descripcion: string;
+	dias: number[];
+}
+
+const programas: Programa[] = [
 	{
-		title: "Maná de la Mañana",
-		host: "Pastor José Ramírez",
-		schedule: "Lun a Vie · 6:00 – 9:00",
-		time: "3 h",
-		tag: "Predicación",
-		description:
-			"Arranca el día con devocional, oración y la Palabra para caminar con fuerza.",
+		id: "ally-chishi",
+		titulo: "ALLY Chishi",
+		diasLabel: "Lunes a viernes",
+		diasCorto: "Lun – Vie",
+		inicio: "17:00",
+		fin: "20:00",
+		duracion: "3 h",
+		descripcion:
+			"Tu bloque de la tarde, de lunes a viernes de 17:00 a 20:00 h, con alabanzas y mensaje para terminar bien el día.",
+		dias: [1, 2, 3, 4, 5],
 	},
 	{
-		title: "Alabanza sin Límites",
-		host: "Laura Mendoza",
-		schedule: "Sáb · 10:00 – 13:00",
-		time: "3 h",
-		tag: "Música",
-		description:
-			"Lo mejor de la alabanza contemporánea y adoración en español para renovarte.",
-	},
-	{
-		title: "Familia en Cristo",
-		host: "Carlos y Ana Ruiz",
-		schedule: "Mié · 20:00 – 21:30",
-		time: "1 h 30",
-		tag: "Familia",
-		description:
-			"Consejería práctica, testimonios y herramientas para fortalecer el hogar.",
-	},
-	{
-		title: "Juventud en Acción",
-		host: "Equipo juvenil",
-		schedule: "Vie · 19:00 – 21:00",
-		time: "2 h",
-		tag: "Juventud",
-		description:
-			"Música, entrevistas y retos de fe pensados para la nueva generación.",
-	},
-	{
-		title: "Hora de la Profecía",
-		host: "Obispo Daniel Ortega",
-		schedule: "Dom · 18:00 – 20:00",
-		time: "2 h",
-		tag: "Profecía",
-		description:
-			"Mensajes de dirección espiritual, intercesión y avisos para la iglesia.",
-	},
-	{
-		title: "Coros y Cantos",
-		host: "Selección musical",
-		schedule: "Todos los días · 14:00",
-		time: "2 h",
-		tag: "Música",
-		description:
-			"Coros, himnos y cantos que acompañan tu tarde con himnos inolvidables.",
+		id: "dominicales",
+		titulo: "Domingos Dominicales",
+		diasLabel: "Domingos",
+		diasCorto: "Domingo",
+		inicio: "05:00",
+		fin: "08:00",
+		duracion: "3 h",
+		descripcion:
+			"Domingos desde las 05:00 hasta las 08:00 h para iniciar la semana con fe, adoración y predicación.",
+		dias: [0],
 	},
 ];
 ---
@@ -70,20 +52,159 @@ const programs = [
 				id="programas-title"
 				class="mt-2 font-display text-headline-lg font-bold tracking-tight text-on-surface dark:text-white"
 			>
-				Programas para cada momento de tu día
+				Nuestros bloques en vivo
 			</h2>
 			<p class="mt-4 text-body-lg text-on-surface-variant dark:text-inverse-on-surface/80">
-				Predicación, música y contenidos para toda la familia, con horarios que se
-				adaptan a tu rutina.
+				Sintoniza nuestros programas en horario y, fuera de ellos, disfruta
+				música y alabanzas las 24 horas.
 			</p>
 		</div>
 
-		<div class="mt-10 grid gap-gutter sm:grid-cols-2 lg:grid-cols-3">
-			{programs.map((program) => <ProgramCard {...program} />)}
+		<div class="mt-10 grid gap-gutter sm:grid-cols-2">
+			{
+				programas.map((programa) => (
+					<article
+						data-programa
+						data-dias={JSON.stringify(programa.dias)}
+						data-inicio={programa.inicio}
+						data-fin={programa.fin}
+						class="group flex h-full flex-col gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-card transition-shadow hover:shadow-elevated dark:border-white/10 dark:bg-white/5"
+					>
+						<div class="flex flex-wrap items-center justify-between gap-2">
+							<Badge variant="dawn">{programa.diasLabel}</Badge>
+							<span data-estado aria-live="polite" class="ml-auto">
+								<span
+									data-estado-live
+									class="hidden items-center gap-1.5 rounded-full bg-live px-3 py-1 text-label-broadcast uppercase text-white shadow-aura"
+								>
+									<span class="relative flex h-1.5 w-1.5">
+										<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+										<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+									</span>
+									Al aire ahora
+								</span>
+								<span
+									data-estado-next
+									class="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-label-broadcast uppercase text-on-surface-variant dark:bg-white/10 dark:text-inverse-on-surface"
+								>
+									<Icon name="clock" class="h-3.5 w-3.5" />
+									<span data-estado-texto>
+										{programa.diasCorto} · {programa.inicio}
+									</span>
+								</span>
+							</span>
+						</div>
+
+						<div class="flex items-center gap-3">
+							<span
+								class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-dawn-bright text-navy shadow-aura transition-transform group-hover:scale-110"
+							>
+								<Icon name="mic" class="h-6 w-6" />
+							</span>
+							<h3 class="font-display text-headline-sm text-on-surface dark:text-white">
+								{programa.titulo}
+							</h3>
+						</div>
+
+						<p
+							class="font-display text-headline-md font-bold tabular-nums text-dawn dark:text-dawn-bright"
+						>
+							{programa.inicio} – {programa.fin}
+						</p>
+
+						<p class="text-body-sm text-on-surface-variant dark:text-inverse-on-surface/70">
+							{programa.descripcion}
+						</p>
+
+						<div
+							class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/60 pt-4 dark:border-white/10"
+						>
+							<span
+								class="inline-flex items-center gap-1.5 text-label-md uppercase text-on-surface-variant dark:text-inverse-on-surface/60"
+							>
+								<Icon name="clock" class="h-4 w-4" />
+								{programa.duracion}
+							</span>
+							<button
+								type="button"
+								data-playlist-open
+								data-media-target="music"
+								class="inline-flex items-center gap-1.5 rounded-full bg-dawn px-4 py-2 text-label-lg font-semibold text-white transition-colors hover:bg-dawn-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 dark:focus-visible:ring-offset-navy-soft"
+							>
+								<Icon name="play" class="h-4 w-4" />
+								Escuchar
+							</button>
+						</div>
+					</article>
+				))
+			}
 		</div>
 
-		<div class="mt-10 flex justify-center">
-			<Button href="/programas" variant="ghost">Ver toda la programación</Button>
+		<div
+			class="mt-6 flex flex-wrap items-center justify-center gap-4 rounded-xl border border-dashed border-outline-variant bg-surface-container-low px-6 py-5 text-center dark:border-white/15 dark:bg-white/5"
+		>
+			<span
+				class="flex h-9 w-9 items-center justify-center rounded-full bg-dawn/15 text-dawn dark:bg-dawn-bright/15 dark:text-dawn-bright"
+			>
+				<Icon name="headphones" class="h-5 w-5" />
+			</span>
+			<p class="text-body-sm text-on-surface-variant dark:text-inverse-on-surface/75">
+				<span class="font-semibold text-on-surface dark:text-white"
+					>El resto del día</span
+				>: música, alabanzas y predicación las 24 horas.
+			</p>
 		</div>
 	</div>
 </section>
+
+<script>
+	const DIAS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+	const aMinutos = (hora: string) => {
+		const [h, m] = hora.split(":").map(Number);
+		return h * 60 + m;
+	};
+
+	document.querySelectorAll<HTMLElement>("[data-programa]").forEach((card) => {
+		const dias = JSON.parse(card.dataset.dias ?? "[]") as number[];
+		const inicio = card.dataset.inicio ?? "";
+		const fin = card.dataset.fin ?? "";
+		const vivo = card.querySelector<HTMLElement>("[data-estado-live]");
+		const proximo = card.querySelector<HTMLElement>("[data-estado-next]");
+		const texto = card.querySelector<HTMLElement>("[data-estado-texto]");
+		if (!vivo || !proximo || !texto) return;
+
+		const actualizar = () => {
+			const ahora = new Date();
+			const hoy = ahora.getDay();
+			const min = ahora.getHours() * 60 + ahora.getMinutes();
+			const enVivo =
+				dias.includes(hoy) && min >= aMinutos(inicio) && min < aMinutos(fin);
+
+			if (enVivo) {
+				vivo.classList.remove("hidden");
+				vivo.classList.add("inline-flex");
+				proximo.classList.add("hidden");
+				proximo.classList.remove("inline-flex");
+				return;
+			}
+
+			let etiqueta = `Próximo · ${inicio}`;
+			for (let i = 0; i < 8; i++) {
+				const d = (hoy + i) % 7;
+				if (!dias.includes(d)) continue;
+				if (i === 0 && min >= aMinutos(inicio)) continue;
+				const cuando = i === 0 ? "Hoy" : i === 1 ? "Mañana" : DIAS[d];
+				etiqueta = `${cuando} · ${inicio}`;
+				break;
+			}
+			texto.textContent = etiqueta;
+			vivo.classList.add("hidden");
+			vivo.classList.remove("inline-flex");
+			proximo.classList.remove("hidden");
+			proximo.classList.add("inline-flex");
+		};
+
+		actualizar();
+		window.setInterval(actualizar, 60_000);
+	});
+</script>

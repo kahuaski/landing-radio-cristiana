@@ -1,0 +1,172 @@
+---
+import { AD_SPOTS, type AdSpot } from "../../config/ads";
+
+interface Props {
+	/** Lista de spots a mostrar. Por defecto, la configuración global. */
+	spots?: AdSpot[];
+	/** Milisegundos que dura cada anuncio visible. */
+	intervalo?: number;
+	/** Clases extra para ajustar espaciado según la ubicación. */
+	class?: string;
+	/** Reduce la altura del banner (ideal para la posición bajo el navbar). */
+	compacto?: boolean;
+}
+
+const {
+	spots = AD_SPOTS,
+	intervalo = 6000,
+	class: className = "py-10 md:py-12",
+	compacto = false,
+} = Astro.props;
+const total = spots.length;
+const ratio = compacto
+	? "aspect-[5/1] sm:aspect-[7/1]"
+	: "aspect-[3.2/1] sm:aspect-[4/1]";
+---
+
+{
+	total > 0 && (
+		<section aria-label="Publicidad" class={className}>
+			<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<p class="mb-2 text-label-md uppercase text-on-surface-variant/70 dark:text-inverse-on-surface/50">
+					Publicidad
+				</p>
+
+				<div
+					data-ad-carousel
+					data-interval={intervalo}
+					class="group relative overflow-hidden rounded-xl border border-outline-variant/60 bg-surface-container-lowest shadow-card dark:border-white/10 dark:bg-navy-soft"
+				>
+					<div class={`relative ${ratio}`}>
+						{spots.map((spot, i) => (
+							<a
+								href={spot.href}
+								target={spot.href.startsWith("http") ? "_blank" : undefined}
+								rel={spot.href.startsWith("http") ? "noopener noreferrer" : undefined}
+								data-ad-slide
+								aria-hidden={i === 0 ? undefined : "true"}
+								tabindex={i === 0 ? undefined : -1}
+								class:list={[
+									"absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dawn-bright",
+									i === 0
+										? "opacity-100"
+										: "pointer-events-none opacity-0",
+								]}
+							>
+								{spot.imagen ? (
+									<img
+										src={spot.imagen}
+										alt={spot.alt}
+										width="1200"
+										height="300"
+										loading="lazy"
+										class="h-full w-full object-cover"
+									/>
+								) : (
+									<div class="flex h-full w-full flex-col items-center justify-center gap-1 bg-gradient-to-r from-dawn/15 via-dawn-bright/10 to-dawn/15 px-6 text-center dark:from-dawn/25 dark:via-dawn-bright/10 dark:to-dawn/25">
+										<p
+											class={`font-display font-semibold text-on-surface dark:text-white ${
+												compacto ? "text-body-sm sm:text-title-md" : "text-title-md"
+											}`}
+										>
+											{spot.titulo}
+										</p>
+										{spot.descripcion && (
+											<p
+												class={`max-w-lg text-body-sm text-on-surface-variant dark:text-inverse-on-surface/70 ${
+													compacto ? "hidden sm:block" : ""
+												}`}
+											>
+												{spot.descripcion}
+											</p>
+										)}
+									</div>
+								)}
+							</a>
+						))}
+					</div>
+
+					{total > 1 && (
+						<div
+							role="group"
+							aria-label="Elegir anuncio"
+							class={`absolute inset-x-0 flex justify-center gap-1.5 ${
+								compacto ? "bottom-1" : "bottom-2"
+							}`}
+						>
+							{spots.map((spot, i) => (
+								<button
+									type="button"
+									data-ad-dot
+									aria-label={`Ver anuncio ${i + 1}: ${spot.titulo}`}
+									aria-current={i === 0 ? "true" : undefined}
+									class:list={[
+										"h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-offset-2 focus-visible:ring-offset-surface dark:focus-visible:ring-offset-navy-soft",
+										i === 0
+											? "w-6 bg-dawn-bright"
+											: "w-2 bg-on-surface/30 hover:bg-on-surface/50 dark:bg-white/40 dark:hover:bg-white/60",
+									]}
+								/>
+							))}
+						</div>
+					)}
+				</div>
+			</div>
+		</section>
+	)
+}
+
+<script>
+	const carousels = document.querySelectorAll<HTMLElement>("[data-ad-carousel]");
+
+	carousels.forEach((root) => {
+		const slides = Array.from(root.querySelectorAll<HTMLElement>("[data-ad-slide]"));
+		const dots = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-ad-dot]"));
+		if (slides.length < 2) return;
+
+		const intervalo = Number(root.dataset.interval) || 6000;
+		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		let index = 0;
+		let timer: number | undefined;
+
+		const show = (next: number) => {
+			index = (next + slides.length) % slides.length;
+			slides.forEach((slide, i) => {
+				const activo = i === index;
+				slide.classList.toggle("opacity-100", activo);
+				slide.classList.toggle("opacity-0", !activo);
+				slide.classList.toggle("pointer-events-none", !activo);
+				slide.setAttribute("aria-hidden", activo ? "false" : "true");
+				slide.setAttribute("tabindex", activo ? "0" : "-1");
+			});
+			dots.forEach((dot, i) => {
+				if (i === index) dot.setAttribute("aria-current", "true");
+				else dot.removeAttribute("aria-current");
+				dot.classList.toggle("bg-dawn-bright", i === index);
+				dot.classList.toggle("w-6", i === index);
+				dot.classList.toggle("bg-on-surface/30", i !== index);
+				dot.classList.toggle("w-2", i !== index);
+			});
+		};
+
+		const stop = () => window.clearInterval(timer);
+		const start = () => {
+			if (reduceMotion) return;
+			stop();
+			timer = window.setInterval(() => show(index + 1), intervalo);
+		};
+
+		root.addEventListener("mouseenter", stop);
+		root.addEventListener("mouseleave", start);
+		root.addEventListener("focusin", stop);
+		root.addEventListener("focusout", start);
+		dots.forEach((dot, i) =>
+			dot.addEventListener("click", () => {
+				show(i);
+				start();
+			}),
+		);
+
+		start();
+	});
+</script>

@@ -43,7 +43,7 @@ export const MEDIA: Record<MediaKind, MediaSource> = {
 		title: "Predicaciones y mensajes",
 		subtitle: "Radio Ministerial Mushuk Kawsay",
 		// ⚠️ Reemplaza por tu playlist de videos.
-		url: "https://www.youtube.com/playlist?list=PL_REPLACE_VIDEOS_ID",
+		url: "https://www.youtube.com/watch?v=q0dVxPI9fwI&list=RDq0dVxPI9fwI&start_radio=1",
 	},
 };
 

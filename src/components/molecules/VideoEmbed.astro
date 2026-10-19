@@ -1,0 +1,81 @@
+---
+import Icon from "../atoms/Icon.astro";
+
+interface Props {
+	/** URL de embed de YouTube ya resuelta (ver getEmbedUrl). */
+	src: string;
+	/** Imagen de portada mostrada antes de reproducir. */
+	poster: string;
+	/** Texto descriptivo del video (título del iframe). */
+	title: string;
+	/** Texto del botón de reproducción. */
+	label?: string;
+	class?: string;
+}
+
+const {
+	src,
+	poster,
+	title,
+	label = "Reproducir video",
+	class: className = "",
+} = Astro.props;
+---
+
+<div
+	data-video-embed
+	data-src={src}
+	data-title={title}
+	class={`group relative aspect-video w-full overflow-hidden rounded-lg bg-black ${className}`}
+>
+	<img
+		src={poster}
+		alt=""
+		loading="lazy"
+		decoding="async"
+		class="h-full w-full object-cover opacity-75 transition-opacity duration-300 group-hover:opacity-90"
+	/>
+	<div
+		class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent"
+		aria-hidden="true"
+	>
+	</div>
+	<button
+		type="button"
+		data-video-play
+		aria-label={label}
+		class="absolute inset-0 flex flex-col items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dawn-bright focus-visible:ring-inset"
+	>
+		<span
+			class="flex h-16 w-16 items-center justify-center rounded-full bg-dawn text-white shadow-aura transition-transform duration-300 group-hover:scale-110"
+		>
+			<Icon name="play" class="ml-0.5 h-8 w-8" />
+		</span>
+		<span class="text-label-lg font-semibold text-white drop-shadow">{label}</span>
+	</button>
+</div>
+
+<script>
+	document.querySelectorAll<HTMLElement>("[data-video-embed]").forEach((embed) => {
+		const button = embed.querySelector<HTMLButtonElement>("[data-video-play]");
+		if (!button) return;
+
+		button.addEventListener("click", () => {
+			const src = embed.dataset.src;
+			if (!src) return;
+
+			const iframe = document.createElement("iframe");
+			iframe.src = src;
+			iframe.title = embed.dataset.title ?? "Reproductor de video";
+			iframe.setAttribute(
+				"allow",
+				"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+			);
+			iframe.setAttribute("allowfullscreen", "");
+			iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+			iframe.className = "h-full w-full border-0";
+
+			embed.replaceChildren(iframe);
+		});
+	});
+</script>
