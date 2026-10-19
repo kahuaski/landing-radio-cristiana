@@ -113,8 +113,7 @@ const websiteSchema = {
 			}
 		/>
 		<link rel="canonical" href={canonicalURL.href} />
-		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f9ff" />
-		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+		<meta name="theme-color" content="#0f172a" />
 
 		<!-- Open Graph -->
 		<meta property="og:type" content={type} />
@@ -139,13 +138,11 @@ const websiteSchema = {
 		<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
 		<script>
-			if (
-				localStorage.theme === "dark" ||
-				(!("theme" in localStorage) &&
-					window.matchMedia("(prefers-color-scheme: dark)").matches)
-			) {
-				document.documentElement.classList.add("dark");
-			}
+			const oscuro = localStorage.theme !== "light";
+			if (oscuro) document.documentElement.classList.add("dark");
+			document
+				.querySelector('meta[name="theme-color"]')
+				?.setAttribute("content", oscuro ? "#0f172a" : "#f8f9ff");
 		</script>
 	</head>
 	<body
