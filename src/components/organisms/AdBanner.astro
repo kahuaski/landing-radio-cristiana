@@ -20,8 +20,8 @@ const {
 } = Astro.props;
 const total = spots.length;
 const ratio = compacto
-	? "aspect-[5/1] sm:aspect-[7/1]"
-	: "aspect-[3.2/1] sm:aspect-[4/1]";
+	? "h-[90px] sm:h-[110px] md:h-[130px] lg:h-[150px]"
+	: "h-[140px] sm:h-[180px] md:h-[220px] lg:h-[260px]";
 ---
 
 {
@@ -37,7 +37,7 @@ const ratio = compacto
 					data-interval={intervalo}
 					class="group relative overflow-hidden rounded-xl border border-outline-variant/60 bg-surface-container-lowest shadow-card dark:border-white/10 dark:bg-navy-soft"
 				>
-					<div class={`relative ${ratio}`}>
+					<div class={`relative ${ratio} w-full overflow-hidden`}>
 						{spots.map((spot, i) => (
 							<a
 								href={spot.href}
@@ -47,7 +47,9 @@ const ratio = compacto
 								aria-hidden={i === 0 ? undefined : "true"}
 								tabindex={i === 0 ? undefined : -1}
 								class:list={[
-									"absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dawn-bright",
+									spot.imagen
+										? "absolute inset-0 text-center transition-opacity duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dawn-bright"
+										: "absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-dawn-bright",
 									i === 0
 										? "opacity-100"
 										: "pointer-events-none opacity-0",
@@ -57,10 +59,8 @@ const ratio = compacto
 									<img
 										src={spot.imagen}
 										alt={spot.alt}
-										width="1200"
-										height="300"
 										loading="lazy"
-										class="h-full w-full object-cover"
+										class="block h-full w-full object-cover object-center"
 									/>
 								) : (
 									<div class="flex h-full w-full flex-col items-center justify-center gap-1 bg-gradient-to-r from-dawn/15 via-dawn-bright/10 to-dawn/15 px-6 text-center dark:from-dawn/25 dark:via-dawn-bright/10 dark:to-dawn/25">

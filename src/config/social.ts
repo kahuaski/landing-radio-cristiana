@@ -19,7 +19,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
 		red: "facebook",
 		label: "Facebook",
 		handle: "/RadioMushukKawsay",
-		url: "https://www.facebook.com/REEMPLAZA_TU_PAGINA",
+		url: "https://www.facebook.com/profile.php?id=61550567526478",
 		color: "#1877f2",
 	},
 	{
@@ -33,7 +33,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
 		red: "youtube",
 		label: "YouTube",
 		handle: "@MushukKawsay",
-		url: "https://www.youtube.com/@REEMPLAZA_TU_CANAL",
+		url: "https://www.youtube.com/@kahuaski",
 		color: "#ff0000",
 	},
 	{
